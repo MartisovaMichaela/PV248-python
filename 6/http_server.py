@@ -3,7 +3,7 @@ from urllib.parse import *
 from search import search
 import json
 
-# ex 6, p1/p2
+# ex 6, p1/p2/p3
 class Handler(BaseHTTPRequestHandler):
     """ for tests:
     http://localhost:8000/result?q=tom&f=html
@@ -20,24 +20,53 @@ class Handler(BaseHTTPRequestHandler):
         print(url)
         print(query_table)
 
-        if 'q' not in query_table:
-            s.wfile.write(str.encode('no result\n'))
+        if len(query_table) == 0:
+            present_form(s)
+            pass
         else:
+            if 'q' not in query_table:
+                s.wfile.write(str.encode('no result\n'))
+                return
+
             res = search(query_table['q'][0])
-            out = []
             print(res)
 
             if 'f' in query_table and query_table['f'][0] == 'json':
-                s.wfile.write(str.encode(json.dumps(res)))
+                present_json(s, res)
             elif 'f' in query_table and query_table['f'][0] == 'html':
-                s.wfile.write(str.encode("<html><body>"))
-                for i in res:
-                    s.wfile.write(str.encode("<p>"))
-                    s.wfile.write(str.encode(i[0]))
-                    s.wfile.write(str.encode(" :" + str(i[1])))
-                    s.wfile.write(str.encode("</p>"))
-                s.wfile.write(str.encode(out))
-                s.wfile.write(str.encode("</body></html>"))
+                present_html(s, res)
+
+
+def present_form(state):
+    form = """
+<!DOCTYPE html>
+<html>
+<body>
+<form action="result">
+  Search string:<br>
+  <input type="text" name="q" value="mozart"><br>
+  Format:<br>
+  <input type="text" name="f" value="html"><br>
+  <input type="submit" value="Submit">
+</form>
+</body>
+</html>
+"""
+    state.wfile.write(str.encode(form))
+
+
+def present_json(state, data):
+    state.wfile.write(str.encode(json.dumps(data)))
+
+
+def present_html(state, data):
+    out = "<html><body>%s</html></body>"
+    lines = []
+    for i in data:
+        line = "<p>%s: %s</p>" % (i[0], str(i[1]))
+        lines.append(line)
+    state.wfile.write(str.encode('\n'.join(lines)))
+
 
 httpd = HTTPServer(('localhost', 8000), Handler)
 httpd.serve_forever()
