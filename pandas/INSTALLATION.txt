@@ -1,0 +1,5 @@
+Predtým ako budete môcť spustiť toto cvičenie je potrebné nainštalovať zopár vecí.
+V prvom rade bude potrebné mať nainštalovaný Python 3+ (preferovane 3.5.+), môžete si ho stiahnuť na https://www.pythong.org.
+Pokiaľ si chcete ušetriť sťahovanie niektorých balíčkov, môžete si nainštalovať distribúciu Pythnu pod názvom Anaconda (https://www.continuum.io/downloads)
+Na spustenie cvičenia je potrebný Jupyter Notebook (https://jupyter.org/install.html). Ak ste si nainštalovali Anacondu, máte Jupyter Notebook nainštalovaný.
+Jupyter Notebook spustíte otvorením príkazovej riadky (konzoly, terminálu) a vpísaním príkazu: jupyter notebook 
