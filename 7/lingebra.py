@@ -24,8 +24,6 @@ print("correct answer?", allclose(dot(a, x), b))
 print("\n===\n")
 
 # ex3
-# TODO parse input: remove variables
-# TODO present output
 # 2x + 3y = 5
 #  x -  y = 0
 f = open("equation.txt", "r")
@@ -33,10 +31,18 @@ s = f.read().split()
 pp(s)
 a = []
 b = []
+regex = re.compile('[^0-9]')
 for i in s:
     parts = i.split("=")
-    a.append(re.split('\+|-', parts[0]))
-
-    b.append(parts[1])
+    t = []
+    for j in re.split('\+|-', parts[0]):
+        r = regex.sub('', j)
+        if r == '':
+            t.append(1)
+        else:
+            t.append(int(r))
+    a.append(t)
+    b.append(int(parts[1]))
 print(a)
 print(b)
+print("result:", linalg.solve(a, b))
